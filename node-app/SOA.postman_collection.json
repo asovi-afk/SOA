@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "6d672b33-5c54-4fbc-8445-d5f049651a90",
+		"name": "SOA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Vraca sve Alergene",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/alergeni/getall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"alergeni",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vraca sve Koncetracije",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/koncentracije/getall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"koncentracije",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vraca sve vrste Polena na odredjenoj lokaciji",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"location_name\" :\"БЕОГРАД - ЗЕЛЕНО БРДО\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/polen/get-polen-on-specific-location",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"polen",
+						"get-polen-on-specific-location"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vraca sve Lokacije",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/lokacije/getall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"lokacije",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vraca Tipove alergena",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/tipovialergena/getall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"tipovialergena",
+						"getall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vraca sve alergene navedenog tipa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Корови\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/alergeni/get-alergen-of-specific-type",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"alergeni",
+						"get-alergen-of-specific-type"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
