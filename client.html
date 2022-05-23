@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>Transalte app</title>
+    </head>
+    <body>
+        <input type="text" id="plainText"></input></body>
+        <br/>
+        <input type="text" id="TranslatedText"></input>
+        <br/>
+        <button id="TranslateButton">Transalte by faasd</button>
+
+
+        <script>
+
+            const url="http://localhost:5000/";
+
+            const action=document.getElementById('TranslateButton');
+            
+            action.addEventListener("click",async()=>{
+
+                console.log("Kliknuto");
+                let inputPlain=document.querySelector('#plainText');
+                if(inputPlain.value=="")
+                    alert("Fill first input");
+                else
+                {
+                    const body = {
+                        input: inputPlain.value
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    let output=document.querySelector("#TranslatedText");
+                    output.value=await response.json();
+
+                }
+
+            })
+
+
+        </script>
+    </body>
+</html>
