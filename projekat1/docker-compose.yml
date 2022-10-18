@@ -1,0 +1,43 @@
+services: 
+  #MongoDB 
+  mongo_db: 
+    container_name: mongo_db_container
+    build: ./database/
+    restart: always
+    # networks:
+    #   - back-tier
+    volumes: 
+      - db_data:/data/db
+
+  #Node API service
+  # api:
+  #   container_name: api_container
+  #   build: .
+  #   ports: 
+  #     - 5000:5000
+  #   networks:
+  #     #- host
+  #     - back-tier
+  #   environment:
+  #     DB_CONNECTION: mongodb://mongo_db:27017
+  #   depends_on:
+  #     - mongo_db
+
+  #Gateway API
+  gateway:
+    container_name: gateway_container
+    build: ./gateway/
+    # networks:
+    #  - back-tier
+    #  - default
+    ports:
+      - 5000:5000
+
+volumes:
+  db_data:
+    labels:
+      com.soa.description: "Data volume for mongodb" 
+    name: "projekat-1-data"
+
+# networks:
+#   back-tier: {}
