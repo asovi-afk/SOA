@@ -1,0 +1,60 @@
+services: 
+  # #MongoDB 
+  # mongo_db: 
+  #   container_name: mongo_db_container
+  #   build: ../projekat1/database/
+  #   restart: always
+  #   # networks:
+  #   #   - back-tier
+  #   volumes: 
+  #     - db_data:/data/db
+
+  mosquitto:
+    container_name: mosquitto_container
+    build: ./mosquitto/
+    expose:
+      - "1883"
+
+  test:
+    container_name: test_container
+    image: lfedge/ekuiper:1.7.0-alpine
+    environment:
+      - MQTT_SOURCE__DEFAULT__SERVER=tcp://mosquitto:1883
+  # analytics: 
+  #   container_name: analytics_container
+  #   build: ./analytics/
+  #   depends_on:
+  #     - mosquitto
+
+  #Node API service
+  # api:
+  #   container_name: api_container
+  #   build: .
+  #   ports: 
+  #     - 5000:5000
+  #   networks:
+  #     #- host
+  #     - back-tier
+  #   environment:
+  #     DB_CONNECTION: mongodb://mongo_db:27017
+  #   depends_on:
+  #     - mongo_db
+
+  #Gateway API
+#   gateway:
+#     container_name: gateway_container
+#     build: ../projekat1/gateway/
+#     # networks:
+#     #  - back-tier
+#     #  - default
+#     ports:
+#       - 5000:5000
+
+# volumes:
+#   db_data:
+#     labels:
+#       com.soa.description: "Data volume for mongodb" 
+#     name: "projekat-1-data"
+
+# networks:
+#   back-tier: {}
