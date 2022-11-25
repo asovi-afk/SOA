@@ -1,0 +1,13 @@
+{
+    "id": "spike_rule",
+    "sql": "SELECT title, COUNT(*) as repeats FROM requests_stream GROUP BY title, SESSIONWINDOW(ss, 15, 5);",
+    "actions": [
+        {
+            "memory": {
+                "topic": "session/titles",
+                "sendSingle": false,
+                "dataTemplate": "{\"arr\":{{toJson .}}}"
+            }
+        }
+    ]
+}

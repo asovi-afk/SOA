@@ -1,0 +1,19 @@
+mosquitto_pub -h mosquitto -m "{\"title\": \"Sandman\"}" -t analytics/requests/filter
+mosquitto_pub -h mosquitto -m "{\"title\": \"Moana\"}" -t analytics/requests/filter
+
+mosquitto_sub -h mosquitto -t analytics/results/filter
+
+mosquitto_pub -h mosquitto -m "{\"title\": \"Moana\"}" -t analytics/requests/signal
+mosquitto_pub -h mosquitto -m "{\"title\": \"Sandman\"}" -t analytics/requests/signal
+
+
+mosquitto_pub -h mosquitto -m "{\"title\": \"2 times more\"}" -t analytics/results/filter2
+
+RUN ["apk", "update"]
+RUN ["apk", "upgrade"]
+RUN ["apk", "add", "libgcc"]
+RUN ["apk", "add", "libstdc++"]
+RUN ["apk", "add", "libc6-compat"]
+
+RUN ["apk", "add", "binutils"]
+RUN ["cp", "/lib64/ld-linux-x86-64.so.2", "/lib/"]

@@ -1,0 +1,1 @@
+requests_stream (title STRING) WITH (FORMAT="JSON", DATASOURCE="analytics/requests/filter")

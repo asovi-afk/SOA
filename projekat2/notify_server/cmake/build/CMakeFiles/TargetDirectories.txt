@@ -1,0 +1,3 @@
+/development/notify_server/cmake/build/CMakeFiles/rebuild_cache.dir
+/development/notify_server/cmake/build/CMakeFiles/edit_cache.dir
+/development/notify_server/cmake/build/CMakeFiles/server.dir
