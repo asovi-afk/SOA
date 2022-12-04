@@ -4,34 +4,34 @@ services:
     container_name: mongo_db_container
     build: ./database/
     restart: always
-    # networks:
-    #   - back-tier
     volumes: 
       - db_data:/data/db
 
   #Node API service
-  # api:
-  #   container_name: api_container
-  #   build: .
-  #   ports: 
-  #     - 5000:5000
-  #   networks:
-  #     #- host
-  #     - back-tier
-  #   environment:
-  #     DB_CONNECTION: mongodb://mongo_db:27017
-  #   depends_on:
-  #     - mongo_db
+  api:
+    container_name: api_container
+    build: ./node_api
+    command: ["--project", "1", "--use-api", "False"]
+    environment:
+      DB_CONNECTION: "mongodb://mongo_db:27017"
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 3000:3000
+    volumes:
+     - ./node_api/development/:/development
 
   #Gateway API
   gateway:
     container_name: gateway_container
     build: ./gateway/
-    # networks:
-    #  - back-tier
-    #  - default
+    depends_on:
+      - api
     ports:
       - 5000:5000
+    volumes:
+      - ./gateway/:/api/
 
 volumes:
   db_data:
@@ -39,5 +39,3 @@ volumes:
       com.soa.description: "Data volume for mongodb" 
     name: "projekat-1-data"
 
-# networks:
-#   back-tier: {}

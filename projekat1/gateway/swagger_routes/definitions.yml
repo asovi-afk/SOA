@@ -1,0 +1,54 @@
+openapi: 3.0.0
+
+components:
+  schemas:
+    Palette:
+      type: object
+      properties:
+        palette_name:
+          type: array
+          items:
+            $ref: '#/definitions/Color'
+
+    Color:
+      type: string
+
+    Movie:
+      type: object
+      properties:
+        _id:
+          type: string
+        cast: 
+          type: string
+          description: CSV cuva podatke u jednom strinug umesto u nizu
+        country:
+          type: string
+        date_added: 
+          type: string
+        description:
+          type: string
+        director:
+          type: string
+        duration:
+          type: string
+        listed_in:
+          type: string
+          description: Zanrovi
+        rating:
+          type: string
+        release_year:
+          type: integer
+        score_average:
+          type: integer
+          description: Srednji rejting
+        title:
+          type: string
+        trakt:
+          type: string
+          description: Link do informacija o flmu na sajtu trakt.tv
+        imdb:
+          type: string
+          description: Link do informacija o flmu na sajtu imdb.com
+        type:
+            type: string
+            description: Uvek vraca Movie

@@ -1,0 +1,55 @@
+openapi: 3.0.0
+
+definitions:
+  OrderId:
+    type: integer
+    default: 321
+
+components:
+  schemas:
+    testObj:
+      type: integer
+      default: 321
+    #Movie:   
+      #$ref: 'definitions.yml#/components/schemas/Movie'
+
+parameters:
+  - name: _id
+    in: query
+    type: string
+    required: true
+    default: 638c90fac44a1fb620ab2402
+    description: ID filma u internoj bazi podataka
+
+
+responses:
+  200:
+    description: Detalji o trazenom filmu
+    #content: application/json
+    schema:
+      $ref: '#/definitions/testObj'
+      default: 555
+    examples:
+      OrderId: 454
+      Petar: Hello Peter
+      _id: "638c90fac44a1fb620ab2402"
+      cast: "Melissa McCarthy, Chris O'Dowd, Kevin Kline, Timothy Olyphant, Daveed Diggs, Skyler Gisondo, Laura Harrier, Rosalind Chao, Kimberly Quinn, Loretta Devine, Ravi Kapoor"
+      country: "United States"
+      date_added: "September 24, 2021"
+      description: "A woman adjusting to life after a loss contends with a feisty bird that's taken over her garden — and a husband who's struggling to find a way forward."
+      director: "Theodore Melfi"
+      duration: "104 min"
+      listed_in: "Comedies, Dramas"
+      rating: "PG-13"
+      release_year: 2021
+      score_average: 56
+      title: "The Starling"
+      imdb: www.imdb.com/title/tt5164438/
+      trakt: trakt.tv/movies/the-starling-2021
+      type: "Movie"
+  204:
+    description: No Content
+  400: 
+    description: Bad Request
+  
+  

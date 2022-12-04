@@ -1,14 +1,40 @@
 services: 
-  # #MongoDB 
-  # mongo_db: 
-  #   container_name: mongo_db_container
-  #   build: ../projekat1/database/
-  #   restart: always
-  #   # networks:
-  #   #   - back-tier
-  #   volumes: 
-  #     - db_data:/data/db
+  # Iz projekta 1
+  #MongoDB 
+  mongo_db: 
+    container_name: mongo_db_container
+    build: ../projekat1/database/
+    restart: always
+    volumes: 
+      - db_data:/data/db
 
+  #Node API service
+  api:
+    container_name: api_container
+    build: ../projekat1/node_api
+    environment:
+      DB_CONNECTION: "mongodb://mongo_db:27017"
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 3000:3000
+
+  #Gateway API
+  gateway:
+    container_name: gateway_container
+    build: ../projekat1/gateway/
+    command: ["--project", "2", "--use-api", "False"]
+    depends_on:
+      - api
+      - mosquitto
+      - analytics # for debuging
+    ports:
+      - 5000:5000
+    volumes:
+      - ../projekat1/gateway/:/api/
+
+  # Iz projekta 2 
   mosquitto:
     container_name: mosquitto_container
     build: ./mosquitto/
@@ -67,36 +93,12 @@ services:
   #     - analytics_influxdb
   #     - notification
 
-  #Node API service
-  # api:
-  #   container_name: api_container
-  #   build: .
-  #   ports: 
-  #     - 5000:5000
-  #   networks:
-  #     #- host
-  #     - back-tier
-  #   environment:
-  #     DB_CONNECTION: mongodb://mongo_db:27017
-  #   depends_on:
-  #     - mongo_db
-
-  #Gateway API
-#   gateway:
-#     container_name: gateway_container
-#     build: ../projekat1/gateway/
-#     # networks:
-#     #  - back-tier
-#     #  - default
-#     ports:
-#       - 5000:5000
-
 volumes:
   analytics_influxdb_storage:
-#   db_data:
-#     labels:
-#       com.soa.description: "Data volume for mongodb" 
-#     name: "projekat-1-data"
+  db_data:
+    labels:
+      com.soa.description: "Data volume for mongodb" 
+    name: "projekat-2-data"
 
 # networks:
 #   back-tier: {}
