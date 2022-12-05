@@ -3,3 +3,4 @@ Flask
 flask-mqtt
 flask_socketio
 flask_bootstrap
+flasgger
