@@ -19,8 +19,8 @@ services:
       - mongo_db
     ports:
       - 3000:3000
-    volumes:
-     - ./node_api/development/:/development
+    # volumes:
+    #  - ./node_api/development/:/development
 
   #Gateway API
   gateway:
@@ -30,8 +30,8 @@ services:
       - api
     ports:
       - 5000:5000
-    volumes:
-      - ./gateway/:/api/
+    # volumes:
+    #   - ./gateway/:/api/
 
 volumes:
   db_data:
