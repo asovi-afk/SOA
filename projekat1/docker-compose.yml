@@ -11,7 +11,6 @@ services:
   api:
     container_name: api_container
     build: ./node_api
-    command: ["--project", "1", "--use-api", "False"]
     environment:
       DB_CONNECTION: "mongodb://mongo_db:27017"
     restart: always
@@ -26,6 +25,7 @@ services:
   gateway:
     container_name: gateway_container
     build: ./gateway/
+    command: ["--use-api=True", "--project=1"] # --project: postavlja se u rezim rada za prvi projekat; --use-api: dozvoljava koriscenje eksternog api-ja
     depends_on:
       - api
     ports:

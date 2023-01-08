@@ -2,7 +2,7 @@ services:
   # Iz projekta 1
   #MongoDB 
   mongo_db: 
-    container_name: mongo_db_container
+    container_name: mongo_db_container_p2
     build: ../projekat1/database/
     restart: always
     volumes: 
@@ -10,7 +10,7 @@ services:
 
   #Node API service
   api:
-    container_name: api_container
+    container_name: api_container_p2
     build: ../projekat1/node_api
     environment:
       DB_CONNECTION: "mongodb://mongo_db:27017"
@@ -22,9 +22,9 @@ services:
 
   #Gateway API
   gateway:
-    container_name: gateway_container
+    container_name: gateway_container_p2
     build: ../projekat1/gateway/
-    command: ["--project", "2", "--use-api", "False"]
+    command: ["--project=2", "--use-api=True"] # --project: postavlja se u rezim rada za drugi projekat; --use-api: dozvoljava koriscenje eksternog api-ja
     depends_on:
       - api
       - mosquitto
@@ -56,6 +56,8 @@ services:
     build: ./analytics_influxdb/
     volumes:
       - analytics_influxdb_storage:/var/lib/influxdb2:rw
+    ports:
+      - 8086:8086
     environment: 
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin

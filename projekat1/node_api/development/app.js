@@ -65,7 +65,10 @@ const typeChecks = function(req) {
 }
 
 function suggestionChecks(filters) {
-    return Object.keys(filters).every(k => {
+    if (Object.keys(filters).length === 0) 
+        return false
+
+        return Object.keys(filters).every(k => {
         let t
         switch(k) {
             case 'title':

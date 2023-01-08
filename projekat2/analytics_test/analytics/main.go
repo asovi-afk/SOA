@@ -58,6 +58,7 @@ func Orchestration(f func()) context.Context {
 
 func ProcessRequest(msg []byte, cMQTT mqtt.Client, cDB influxdb2.Client) {
 	fmt.Printf("Process Request: %s\n", msg)
+	fmt.Println("After Process Request!")
 	// mosquitto
 	token := cMQTT.Publish(Topics["request"], 0x02, false, msg)
 	token.Wait()
@@ -81,15 +82,27 @@ func ProcessResult(msg []byte, f func(rs Result) ) {
 	// unmarshal
 	var rs Result
 	if err := json.Unmarshal(msg, &rs); err != nil {
-		log.Println("could not unmarshal result: ", err)
+		fmt.Println("could not unmarshal result: ", err)
 	} else if len(rs.Register) > 0{
 		// qRPC
+		fmt.Println("Trying gRPC")
 		f(rs)
 	}
+	fmt.Printf("Unmarshaled: %v\n", rs)
+	fmt.Printf("rs.Register: %v\n", rs.Register)
+	fmt.Printf("rs.Register.Len: %v\n", len(rs.Register))
 }
 
 func main() {
+	
 	flag.Parse()
+	ad := *addr
+	fmt.Printf("%s\n", ad)
+	for i:=0; i < 2; i++ {
+		fmt.Println("You are here!")
+	}
+
+	time.Sleep(20 * time.Second)
 	wg := &sync.WaitGroup{}
 	stopped := make(chan struct{})
 
@@ -100,7 +113,7 @@ func main() {
 
 	gRPCConn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		fmt.Printf("did not connect: %v\n", err)
 	}
 	clientRPC := pb.NewNotifierClient(gRPCConn)
 
@@ -123,19 +136,25 @@ func main() {
 					ProcessRequest(msg.Payload(), cMQTT, clientDB)
 				} else {
 					ProcessResult(msg.Payload(), func(rs Result) {
+						fmt.Println("Starting F()")
 						stream, err := clientRPC.Notify(context.Background())
 						if err != nil {
-							log.Fatalf("%v.Notify(_) = _, %v", clientRPC, err)
+							fmt.Printf("%v.Notify(_) = _, %v\n", clientRPC, err)
 						}
 						for _, title := range rs.Register {
 							if err := stream.Send(&pb.NotificationRequest{Title: title}); err != nil {
-								log.Fatalf("%v.Send(%v) = %v", stream, title, err)
+								fmt.Printf("%v.Send(%v) = %v\n", stream, title, err)
+							} else {
+								m := make(map[string]string)
+								m["Title"]=title
+								fmt.Printf("gRPC poslat: %v\n", m)
 							}
 						}
-						_, err = stream.CloseAndRecv()
+						reply, err := stream.CloseAndRecv()
 						if err != nil {
-							log.Fatalf("%v.CloseAndRecv() = %v", stream, err)
+							fmt.Printf("%v.CloseAndRecv() = %v\n", stream, err)
 						}
+						fmt.Printf("gRPC Server returned: %v", reply)
 					})
 				}
 				wg.Done()

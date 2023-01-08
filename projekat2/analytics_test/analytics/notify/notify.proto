@@ -12,4 +12,6 @@ message NotificationRequest {
     string title = 1;
 }
 
-message NotificationResponse {}
+message NotificationResponse {
+    string msg = 1;
+}
