@@ -1,0 +1,43 @@
+name: "windowController"
+isHidden: false # is hidden is false by default
+manufacturer: "Unknown"
+model: "Testing device v_1.0"
+labels:
+  - "controller"
+  - "ventilation"
+description: "Regulates how far should window tilt"
+
+deviceResources:
+-
+  name: "tilt"
+  description: "Get/set the tilt angle; 0 - closed; 90 - wide open"
+  isHidden: false # is false by default
+  properties:
+    valueType: "Int16"
+    readWrite: "RW"
+    units: "degree"
+    defaultValue: "0"
+    minimum: "0"
+    maximum: "90"
+-
+  name: "duration"
+  description: "Get/set the time frame in which the window should perform manual ventilation"
+  isHidden: false
+  properties:
+      valueType: "Int32"
+      units: "seconds"
+      readWrite: "RW"
+      defaultValue: "0"
+      minimum: "0"
+      maximum: "300" 
+
+deviceCommands:
+-
+  name: "Status"
+  readWrite: "R"
+  isHidden: false
+  resourceOperations:
+  - { deviceResource: "tilt" }
+  - { deviceResource: "duration" }
+
+            

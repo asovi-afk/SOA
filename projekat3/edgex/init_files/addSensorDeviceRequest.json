@@ -1,0 +1,24 @@
+[
+    {
+      "apiVersion": "v2",
+      "device": {
+        "name": "Occupancy_sensor_cluster_01",
+        "description": "device za monitoring osvetljenja i co2 koncentracije",
+        "adminState": "UNLOCKED",
+        "operatingState": "UP",
+        "labels": [
+          "home",
+          "hvac"
+        ],
+        "location": "{lat:45.45,long:47.80}",
+        "serviceName": "device-rest",
+        "profileName": "OccupancySensorCluster",
+        "protocols": {
+          "other": {
+            
+          }
+        },
+        "notify": false
+      }
+    }
+  ]

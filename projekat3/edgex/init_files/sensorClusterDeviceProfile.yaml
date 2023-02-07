@@ -1,0 +1,28 @@
+name: "OccupancySensorCluster"
+isHidden: false # is hidden is false by default
+manufacturer: "Unknown"
+model: "Testing device v_1.0"
+labels:
+  - "sensor"
+description: "Sensor cluster providing metrics for brightness and co2 concentration"
+
+deviceResources:
+      -
+        name: "light"
+        description: "Sensor cluster brightness values"
+        isHidden: true # is false by default
+        properties:
+          valueType: "Float64"
+          readWrite: "R"
+          #units: "lux"
+          defaultValue: "300"
+      -
+        name: "co2"
+        description: "Sensor cluster co2 concentration values"
+        isHidden: true
+        properties:
+            valueType: "Float64"
+            readWrite: "R"
+            #units: "ppm"
+            defaultValue: "500"
+            
