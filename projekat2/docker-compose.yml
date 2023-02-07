@@ -1,0 +1,106 @@
+services: 
+  # Iz projekta 1
+  #MongoDB 
+  mongo_db: 
+    container_name: mongo_db_container_p2
+    build: ../projekat1/database/
+    restart: always
+    volumes: 
+      - db_data:/data/db
+
+  #Node API service
+  api:
+    container_name: api_container_p2
+    build: ../projekat1/node_api
+    environment:
+      DB_CONNECTION: "mongodb://mongo_db:27017"
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 3000:3000
+
+  #Gateway API
+  gateway:
+    container_name: gateway_container_p2
+    build: ../projekat1/gateway/
+    command: ["--project=2", "--use-api=True"] # --project: postavlja se u rezim rada za drugi projekat; --use-api: dozvoljava koriscenje eksternog api-ja
+    depends_on:
+      - api
+      - mosquitto
+      - analytics # for debuging
+    ports:
+      - 5000:5000
+    # volumes:
+    #   - ../projekat1/gateway/:/api/
+
+  # Iz projekta 2 
+  mosquitto:
+    container_name: mosquitto_container
+    build: ./mosquitto/
+    expose:
+      - "1883"
+
+  ekuiper:
+    container_name: ekuiper_container
+    build: ./ekuiper/
+    depends_on:
+      - mosquitto
+    environment:
+      - MQTT_SOURCE__DEFAULT__SERVER=tcp://mosquitto:1883
+    cap_add:
+      - ALL
+
+  analytics_influxdb:
+    container_name: analytics_influxdb_container
+    build: ./analytics_influxdb/
+    volumes:
+      - analytics_influxdb_storage:/var/lib/influxdb2:rw
+    ports:
+      - 8086:8086
+    environment: 
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=soa
+      - DOCKER_INFLUXDB_INIT_BUCKET=analytics
+      - DOCKER_INFLUXDB_INIT_RETENTION=1h
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=UDVHkVrADVF1TpkdCVjaycO9vKJfhjRZeDrcd2nWZN1fzaoGrQiZyxL6ehTjRyj8OGZry8Hsp_fa_4VGLYd-_g== 
+
+  notification:
+    container_name: notification_container
+    build: ./notify_server/
+
+  analytics: 
+    container_name: analytics_container
+    build: ./analytics/
+    depends_on:
+      - mosquitto
+      - ekuiper
+      - analytics_influxdb
+      - notification
+
+  # analytics_test je servis za izradu i testiranje go servisa
+  # analytics_test: 
+  #   container_name: analytics_test_container
+  #   build: ./analytics_test/
+  #   #image: golang:1.19-alpine
+  #   volumes:
+  #     - type: bind
+  #       source: ./analytics_test
+  #       target: /analytics_test
+  #   depends_on:
+  #     - mosquitto
+  #     - ekuiper
+  #     - analytics_influxdb
+  #     - notification
+
+volumes:
+  analytics_influxdb_storage:
+  db_data:
+    labels:
+      com.soa.description: "Data volume for mongodb" 
+    name: "projekat-2-data"
+
+# networks:
+#   back-tier: {}

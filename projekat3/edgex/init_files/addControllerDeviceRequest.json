@@ -1,0 +1,26 @@
+[
+    {
+      "apiVersion": "v2",
+      "device": {
+        "name": "window_controller_01",
+        "description": "device za upravljanjem prozorskog okna",
+        "adminState": "UNLOCKED",
+        "operatingState": "UP",
+        "labels": [
+          "home",
+          "window"
+        ],
+        "location": "{lat:45.45,long:47.80}",
+        "serviceName": "device-rest",
+        "profileName": "windowController",
+        "protocols": {
+          "rest": {
+            "host": "controller_window",
+            "port": "4001",
+            "path": "api"
+          }
+        },
+        "notify": false
+      }
+    }
+  ]

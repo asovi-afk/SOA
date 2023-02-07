@@ -1,0 +1,14 @@
+{
+    "id": "formating_rule",
+    "sql": "SELECT register(*) FROM mem_ses_tit_stream ;",
+    "actions": [
+        {
+            "mqtt": {
+                "server": "tcp://mosquitto:1883",
+                "topic": "analytics/results/filter",
+                "sendSingle": true,
+                "dataTemplate": "{{toJson .}}"
+            }
+        }
+    ]
+}

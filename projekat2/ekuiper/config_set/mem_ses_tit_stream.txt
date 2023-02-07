@@ -1,0 +1,1 @@
+mem_ses_tit_stream (arr array(struct(title STRING, repeats BIGINT))) WITH (FORMAT="JSON", DATASOURCE="session/titles", TYPE="memory")

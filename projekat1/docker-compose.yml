@@ -1,0 +1,41 @@
+services: 
+  #MongoDB 
+  mongo_db: 
+    container_name: mongo_db_container
+    build: ./database/
+    restart: always
+    volumes: 
+      - db_data:/data/db
+
+  #Node API service
+  api:
+    container_name: api_container
+    build: ./node_api
+    environment:
+      DB_CONNECTION: "mongodb://mongo_db:27017"
+    restart: always
+    depends_on:
+      - mongo_db
+    ports:
+      - 3000:3000
+    # volumes:
+    #  - ./node_api/development/:/development
+
+  #Gateway API
+  gateway:
+    container_name: gateway_container
+    build: ./gateway/
+    command: ["--use-api=True", "--project=1"] # --project: postavlja se u rezim rada za prvi projekat; --use-api: dozvoljava koriscenje eksternog api-ja
+    depends_on:
+      - api
+    ports:
+      - 5000:5000
+    # volumes:
+    #   - ./gateway/:/api/
+
+volumes:
+  db_data:
+    labels:
+      com.soa.description: "Data volume for mongodb" 
+    name: "projekat-1-data"
+

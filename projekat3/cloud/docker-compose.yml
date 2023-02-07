@@ -1,0 +1,79 @@
+
+networks:
+  cloud-network: 
+    external: true
+  sub-network: 
+    driver: bridge
+
+services:
+  mqtt_brocker:
+    container_name: mosquitto_p3
+    build: ./mosquitto/
+    expose: 
+      - "1883"
+    networks:
+      cloud-network:  
+        aliases:
+          - mosquitto_cloud
+      sub-network: 
+
+  visualization_influxdb:
+    container_name: visualization_influxdb_container
+    image: influxdb:2.4.0-alpine
+    volumes:
+      - analytics_influxdb_storage:/var/lib/influxdb2:rw
+    ports:
+      - 8086:8086
+    environment: 
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=soa
+      - DOCKER_INFLUXDB_INIT_BUCKET=visualization
+      - DOCKER_INFLUXDB_INIT_RETENTION=1h
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=UDVHkVrADVF1TpkdCVjaycO9vKJfhjRZeDrcd2nWZN1fzaoGrQiZyxL6ehTjRyj8OGZry8Hsp_fa_4VGLYd-_g== 
+    networks:
+      sub-network:
+        aliases:
+          - v-influxdb
+
+  grafana:
+    container_name: grafana_container
+    image: grafana/grafana:9.3.6
+    volumes:
+      - analytics_grafana_storage:/var/lib/grafana:rw
+    depends_on:
+      - visualization_influxdb
+    ports:
+      - 3000:3000
+    networks:
+      - sub-network
+
+  visualization: 
+    container_name: visualization_container
+    build: ./visualization/
+    command: [ "-mqtt-host=mqtt_brocker:1883", "-t=p3/edgex/edgex-export-2", "-influxdb-host=v-influxdb:8086"]
+    depends_on:
+      - mqtt_brocker
+      - visualization_influxdb
+    networks:
+      - sub-network
+
+  # # go_test je servis za izradu i testiranje go servisa
+  # go_test: 
+  #   container_name: go_test_container_p3
+  #   image: golang:1.19-alpine
+  #   volumes:
+  #     - type: bind
+  #       source: ./go_test
+  #       target: /go_test
+  #   depends_on:
+  #     - mqtt_brocker
+  #     - visualization_influxdb
+  #   networks:
+  #     - sub-network
+
+
+volumes:
+  analytics_influxdb_storage:
+  analytics_grafana_storage:

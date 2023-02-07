@@ -1,0 +1,18 @@
+{
+	"about": {
+		"trial": true,
+		"author": {
+			"name": "asovi-afk"
+		},
+		"description": {
+			"en_US": "Returns list of titles that meet specific requirements. Look at register_func.go for details"
+		}
+	},
+	"functions": [{
+		"name": "register",
+		"example": "register(args)",
+		"hint": {
+			"en_US": "Returns slice of type string '[]string'"
+		}
+	}]
+}
