@@ -1,0 +1,10 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://10.102.254.251:8080
+functions:
+  translate-async:
+    lang: csharp-httprequest
+    handler: ./translate-async
+    image: asovi12/translate-async:latest
+
